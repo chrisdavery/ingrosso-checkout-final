@@ -180,7 +180,7 @@ function Extension() {
   });
 
   function issetSdi() {
-    const regex = /^[A-Z0-9]{1,7}$/;
+    const regex = /^(?=.*[A-Z])[A-Z0-9]{7,}$/;
     return codSDI !== "" && regex.test(codSDI);
   }
 
@@ -198,7 +198,7 @@ function Extension() {
 
   function isFiscale() {
     const regex = /^[A-Z0-9]{16}$/;
-    return  fiscale !== "" && regex.test(fiscale);
+    return fiscale !== "" && regex.test(fiscale);
   }
 
   function clearPecValidationError() {
