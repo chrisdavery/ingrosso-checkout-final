@@ -65,15 +65,14 @@ function Extension() {
   const [pecValidationError, setPecValidationError] = useState("");
   const [pIvaValidationError, setpIvaValidationError] = useState("");
   const [sdiValidationError, setSdiValidationError] = useState("");
-  // const [fiscaleValidationError, setFiscaleValidationError] = useState("");
+  const [fiscaleValidationError, setFiscaleValidationError] = useState("");
   
   const canBlockProgress = useExtensionCapability("block_progress");
   const rsLabel = canBlockProgress ? "Ragione Sociale" : "Ragione Sociale*";
   const pecLabel = canBlockProgress ? "PEC" : "PEC*";
   const pvLabel = canBlockProgress ? "P.IVA" : "P.IVA*";
   const sdiLabel = canBlockProgress ? "Codice SDI" : "Codice SDI*";
-  // const fiscaleLabel = canBlockProgress ? "Codice Fiscale (obbligatorio per ditte individuali)" : "Codice Fiscale (obbligatorio per ditte individuali)*";
-  const fiscaleLabel =  canBlockProgress ? "Codice Fiscale" : "Codice Fiscale*";
+  const fiscaleLabel = canBlockProgress ? "Codice Fiscale" : "Codice Fiscale (obbligatorio per ditte individuali)*";
 
   useBuyerJourneyIntercept(({ canBlockProgress }) => {
     if (canBlockProgress && !isRset()) {
@@ -199,9 +198,8 @@ function Extension() {
 
   function isFiscale() {
     const regex = /^[A-Z0-9]{16}$/;
-    return regex.test(fiscale);
+    return  fiscale !== "" && regex.test(fiscale);
   }
-
 
   function clearPecValidationError() {
     setPecValidationError("");
@@ -215,9 +213,9 @@ function Extension() {
     setSdiValidationError("");
   }
 
-  // function clearFiscaleValidationError() {
-  //   setFiscaleValidationError("");
-  // }
+  function clearFiscaleValidationError() {
+    setFiscaleValidationError("");
+  }
 
   function clearRagSocValidationError() {
     setRagSocValidationError("");
@@ -271,10 +269,10 @@ function Extension() {
             <TextField
             maxlength="7"
             label={fiscaleLabel}
-            // required={canBlockProgress}
-            // onInput={clearFiscaleValidationError} 
+            required={canBlockProgress}
+            onInput={clearFiscaleValidationError} 
             value={fiscale}
-            // error={fiscaleValidationError}
+            error={fiscaleValidationError}
             onChange={ (value)=> {
               setFiscale(value)
               setCodiceFiscale({

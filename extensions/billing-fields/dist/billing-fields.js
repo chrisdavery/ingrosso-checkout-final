@@ -17682,12 +17682,13 @@ ${errorInfo.componentStack}`);
     const [pecValidationError, setPecValidationError] = (0, import_react15.useState)("");
     const [pIvaValidationError, setpIvaValidationError] = (0, import_react15.useState)("");
     const [sdiValidationError, setSdiValidationError] = (0, import_react15.useState)("");
+    const [fiscaleValidationError, setFiscaleValidationError] = (0, import_react15.useState)("");
     const canBlockProgress = useExtensionCapability("block_progress");
     const rsLabel = canBlockProgress ? "Ragione Sociale" : "Ragione Sociale*";
     const pecLabel = canBlockProgress ? "PEC" : "PEC*";
     const pvLabel = canBlockProgress ? "P.IVA" : "P.IVA*";
     const sdiLabel = canBlockProgress ? "Codice SDI" : "Codice SDI*";
-    const fiscaleLabel = canBlockProgress ? "Codice Fiscale" : "Codice Fiscale*";
+    const fiscaleLabel = canBlockProgress ? "Codice Fiscale" : "Codice Fiscale (obbligatorio per ditte individuali)*";
     useBuyerJourneyIntercept(({ canBlockProgress: canBlockProgress2 }) => {
       if (canBlockProgress2 && !isRset()) {
         return {
@@ -17798,7 +17799,7 @@ ${errorInfo.componentStack}`);
     }
     function isFiscale() {
       const regex = /^[A-Z0-9]{16}$/;
-      return regex.test(fiscale);
+      return fiscale !== "" && regex.test(fiscale);
     }
     function clearPecValidationError() {
       setPecValidationError("");
@@ -17808,6 +17809,9 @@ ${errorInfo.componentStack}`);
     }
     function clearSdiValidationError() {
       setSdiValidationError("");
+    }
+    function clearFiscaleValidationError() {
+      setFiscaleValidationError("");
     }
     function clearRagSocValidationError() {
       setRagSocValidationError("");
@@ -17862,7 +17866,10 @@ ${errorInfo.componentStack}`);
             {
               maxlength: "7",
               label: fiscaleLabel,
+              required: canBlockProgress,
+              onInput: clearFiscaleValidationError,
               value: fiscale,
+              error: fiscaleValidationError,
               onChange: (value) => {
                 setFiscale(value);
                 setCodiceFiscale({
